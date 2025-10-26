@@ -1,0 +1,263 @@
+<!-- sections/dynamic-services.liquid -->
+<section class="services-section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    <h2 style="color: {{ section.settings.heading_color }};">{{ section.settings.heading }}</h2>
+    <p class="subtitle" style="color: {{ section.settings.subtitle_color }};">{{ section.settings.subtitle }}</p>
+
+    <div class="services-grid">
+      {% for block in section.blocks %}
+        <div class="service-box" {{ block.shopify_attributes }}>
+          {% if block.settings.icon_type == 'image' and block.settings.custom_icon != blank %}
+            <img 
+              src="{{ block.settings.custom_icon | img_url: '96x' }}" 
+              alt="{{ block.settings.title | escape }}"
+              width="48"
+              height="48"
+              loading="lazy"
+            >
+          {% elsif block.settings.icon_type == 'url' and block.settings.icon_url != blank %}
+            <img 
+              src="{{ block.settings.icon_url }}" 
+              alt="{{ block.settings.title | escape }}"
+              width="48"
+              height="48"
+              loading="lazy"
+            >
+          {% else %}
+            <!-- Fallback to default icons based on index -->
+            {% assign default_icons = "headset,delivery,guarantee,eco" | split: "," %}
+            {% assign icon_index = forloop.index0 | modulo: 4 %}
+            <img 
+              src="https://img.icons8.com/ios-filled/64/{{ default_icons[icon_index] }}.png" 
+              alt="{{ block.settings.title | escape }}"
+              width="48"
+              height="48"
+              loading="lazy"
+            >
+          {% endif %}
+          
+          <h3 style="color: {{ section.settings.service_title_color }};">{{ block.settings.title }}</h3>
+          <p style="color: {{ section.settings.service_text_color }};">{{ block.settings.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-section {
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .services-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .services-section h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .services-section .subtitle {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+  }
+
+  .service-box {
+    width: 220px;
+    padding: 10px;
+  }
+
+  .service-box img {
+    width: 65px;
+    height: 65px;
+    margin-bottom: 15px;
+  }
+
+  .service-box h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .service-box p {
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .services-grid {
+      gap: 20px;
+    }
+    
+    .service-box {
+      width: 160px;
+    }
+    
+    .services-section h2 {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .services-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .service-box {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Dynamic Services Section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our services"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Making changes to your choices!"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f4fafd"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "service_title_color",
+      "label": "Service Title Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "service_text_color",
+      "label": "Service Text Color",
+      "default": "#555555"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon Type",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default Icon"
+            },
+            {
+              "value": "image",
+              "label": "Custom Image"
+            },
+            {
+              "value": "url",
+              "label": "Icon URL"
+            }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Icon",
+          "info": "Upload a custom icon image (recommended: 48x48px)"
+        },
+        {
+          "type": "url",
+          "id": "icon_url",
+          "label": "Icon URL",
+          "info": "Paste URL to an icon image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Service Title",
+          "default": "24/7 Friendly Support"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Service Description",
+          "default": "Our support team is available 24/7"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dynamic Services Section",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "service",
+          "settings": {
+            "title": "24/7 Friendly Support",
+            "description": "Our support team is available 24/7"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Free Shipping",
+            "description": "Free shipping on all orders today"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Satisfaction Guarantee",
+            "description": "We always make sure our customers are taken care of"
+          }
+        },
+        {
+          "type": "service",
+          "settings": {
+            "title": "Eco Friendly",
+            "description": "We use solar because it's better for the environment"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
