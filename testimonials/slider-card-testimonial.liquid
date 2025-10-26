@@ -1,0 +1,504 @@
+<!-- testimonial-slider.liquid -->
+<div class="testimonial-container">
+  <h1>{{ section.settings.heading }}</h1>
+  <div class="testimonial-slider">
+    <div class="testimonial-track">
+      {% for block in section.blocks %}
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+
+            <p class="testimonial-text">
+              "{{ block.settings.testimonial_text }}"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                {% if block.settings.author_image != blank %}
+                  <img src="{{ block.settings.author_image | img_url: '100x100', crop: 'center' }}" alt="{{ block.settings.author_name }}" loading="lazy">
+                {% else %}
+                  <img src="https://i.pravatar.cc/150?img={{ forloop.index }}" alt="{{ block.settings.author_name }}" loading="lazy">
+                {% endif %}
+              </div>
+              <div class="author-info">
+                <p class="testimonial-name">{{ block.settings.author_name }}</p>
+                <p class="testimonial-role">{{ block.settings.author_role }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <div class="slider-nav">
+    <button class="slider-btn prev-btn" disabled>
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <div class="slider-dots">
+      <!-- Dots will be generated dynamically with JavaScript -->
+    </div>
+    
+    <button class="slider-btn next-btn">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .testimonial-container {
+    max-width: 1420px;
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    position: relative;
+    display: inline-block;
+  }
+
+
+  .testimonial-slider {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto 30px;
+    padding: 10px 0;
+  }
+
+  .testimonial-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .testimonial-slide {
+    flex: 0 0 33.333%;
+    padding: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .testimonial-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .stars {
+    margin-bottom: 15px;
+  }
+
+  .stars i {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin: 0 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #555;
+    font-style: italic;
+    flex-grow: 1;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  .author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    border: 3px solid #6a11cb;
+  }
+
+  .author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .author-info {
+    text-align: left;
+  }
+
+  .testimonial-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+  }
+
+  .testimonial-role {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-top: 3px;
+  }
+
+  .slider-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .slider-btn {
+    background-color: #a58661;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+  }
+
+  .slider-btn:hover {
+    background-color: #fdf7f1;
+    transform: scale(1.05);
+  }
+
+  .slider-btn:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    margin: 0 20px;
+  }
+
+  .slider-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #bdc3c7;
+    border-radius: 50%;
+    margin: 0 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .slider-dot.active {
+    background-color: #a58661;
+    transform: scale(1.2);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .testimonial-slide {
+      flex: 0 0 50%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonial-container {
+      padding: 30px 15px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    .testimonial-slide {
+      flex: 0 0 100%;
+    }
+
+    .slider-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+    }
+
+    .stars i {
+      font-size: 1rem;
+    }
+
+    .slider-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.testimonial-track');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    let currentIndex = 0;
+    const slidesPerView = getSlidesPerView();
+    const totalSlides = slides.length;
+    
+    // Initialize dots based on screen size
+    initializeDots();
+    
+    // Function to determine how many slides to show based on screen width
+    function getSlidesPerView() {
+      if (window.innerWidth < 768) return 1;
+      if (window.innerWidth < 992) return 2;
+      return 3;
+    }
+    
+    // Function to initialize dots
+    function initializeDots() {
+      const dotsContainer = document.querySelector('.slider-dots');
+      dotsContainer.innerHTML = '';
+      
+      const totalDots = Math.ceil((totalSlides - slidesPerView + 1) / 1);
+      
+      for (let i = 0; i < totalDots; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('slider-dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+    
+    // Function to update slider position
+    function updateSlider() {
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+      
+      // Update dots
+      const activeDotIndex = Math.floor(currentIndex / 1);
+      document.querySelectorAll('.slider-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeDotIndex);
+      });
+      
+      // Update button states
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= totalSlides - slidesPerView;
+    }
+    
+    // Function to go to a specific slide
+    function goToSlide(index) {
+      currentIndex = index * 1;
+      updateSlider();
+    }
+    
+    // Next slide function - moves one slide at a time
+    function nextSlide() {
+      if (currentIndex < totalSlides - slidesPerView) {
+        currentIndex += 1;
+        updateSlider();
+      }
+    }
+    
+    // Previous slide function - moves one slide at a time
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        updateSlider();
+      }
+    }
+    
+    // Event listeners for buttons
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      const newSlidesPerView = getSlidesPerView();
+      // Reset to first slide on resize
+      currentIndex = 0;
+      initializeDots();
+      updateSlider();
+    });
+    
+    // Auto slide every 5 seconds
+    let slideInterval = setInterval(nextSlide, 5000);
+    
+    // Pause auto-slide on hover
+    const slider = document.querySelector('.testimonial-slider');
+    slider.addEventListener('mouseenter', function() {
+      clearInterval(slideInterval);
+    });
+    
+    slider.addEventListener('mouseleave', function() {
+      slideInterval = setInterval(nextSlide, 5000);
+    });
+    
+    // Initialize slider
+    updateSlider();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Testimonial Slider",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Testimonials"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "select",
+          "id": "rating",
+          "label": "Rating",
+          "options": [
+            {
+              "value": "1",
+              "label": "1 Star"
+            },
+            {
+              "value": "1.5",
+              "label": "1.5 Stars"
+            },
+            {
+              "value": "2",
+              "label": "2 Stars"
+            },
+            {
+              "value": "2.5",
+              "label": "2.5 Stars"
+            },
+            {
+              "value": "3",
+              "label": "3 Stars"
+            },
+            {
+              "value": "3.5",
+              "label": "3.5 Stars"
+            },
+            {
+              "value": "4",
+              "label": "4 Stars"
+            },
+            {
+              "value": "4.5",
+              "label": "4.5 Stars"
+            },
+            {
+              "value": "5",
+              "label": "5 Stars"
+            }
+          ],
+          "default": "5"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_text",
+          "label": "Testimonial Text",
+          "default": "This service completely transformed my business. The team was professional, responsive, and delivered beyond my expectations."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name",
+          "default": "Sarah Johnson"
+        },
+        {
+          "type": "text",
+          "id": "author_role",
+          "label": "Author Role",
+          "default": "Marketing Director"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial Slider",
+      "category": "Content",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "rating": "5",
+            "testimonial_text": "This service completely transformed my business. The team was professional, responsive, and delivered beyond my expectations.",
+            "author_name": "Sarah Johnson",
+            "author_role": "Marketing Director"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "rating": "4",
+            "testimonial_text": "Outstanding results! The attention to detail and creative approach helped us achieve our goals faster than anticipated.",
+            "author_name": "Michael Chen",
+            "author_role": "CEO, Innovate Solutions"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "rating": "4.5",
+            "testimonial_text": "Working with this team was a game-changer for our company. Their expertise resulted in a 40% increase in engagement.",
+            "author_name": "Emily Rodriguez",
+            "author_role": "Product Manager"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
