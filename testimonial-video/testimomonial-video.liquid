@@ -1,0 +1,263 @@
+{% schema %}
+{
+  "name": "Testimonials Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Testimonials"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL",
+          "default": "https://www.w3schools.com/html/mov_bbb.mp4"
+        },
+        {
+          "type": "text",
+          "id": "poster_url",
+          "label": "Video Poster Image URL",
+          "default": "https://via.placeholder.com/300x400?text=Video"
+        },
+        {
+          "type": "select",
+          "id": "star_rating",
+          "label": "Star Rating",
+          "default": "5",
+          "options": [
+            { "value": "1", "label": "1 Star" },
+            { "value": "2", "label": "2 Stars" },
+            { "value": "3", "label": "3 Stars" },
+            { "value": "4", "label": "4 Stars" },
+            { "value": "5", "label": "5 Stars" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "verified_text",
+          "label": "Verified Text",
+          "default": "Verified"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Testimonial Title",
+          "default": "The Garlic Blend Kid-Approved!"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Testimonials Slider",
+      "category": "Testimonials"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="testi-section">
+  <h2 class="testi-title">{{ section.settings.section_title }}</h2>
+  <div class="testi-slider-container">
+    <button class="testi-arrow prev" aria-label="Previous">&#10094;</button>
+    <div class="testi-slider">
+      {% for block in section.blocks %}
+        <div class="testi-card">
+          <div class="video-wrapper">
+            <video 
+              src="{{ block.settings.video_url }}" 
+              poster="{{ block.settings.poster_url }}" 
+              controls
+              playsinline
+              muted>
+              Sorry, your browser does not support embedded videos.
+            </video>
+          </div>
+          <div class="testi-info">
+            <div class="rating">
+              {% assign stars = block.settings.star_rating | plus: 0 %}
+              <span>
+                {% for i in (1..stars) %}
+                  ⭐
+                {% endfor %}
+              </span>
+              <span class="verified">{{ block.settings.verified_text }}</span>
+            </div>
+            <h4>{{ block.settings.title }}</h4>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="testi-arrow next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<style>
+  .testi-section {
+    max-width: 1420px;
+    margin: 40px auto;
+    padding: 0 15px;
+    font-family: Arial, sans-serif;
+  }
+
+  .testi-title {
+    text-align: center;
+    font-size: 2.1 rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  .testi-slider-container {
+    position: relative;
+  }
+
+  .testi-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding-bottom: 10px;
+  }
+
+  .testi-slider::-webkit-scrollbar {
+    display: none;
+  }
+  .testi-slider {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .testi-card {
+    flex: 0 0 260px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  .testi-info {
+    padding: 15px;
+    flex-grow: 1;
+  }
+
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  .verified {
+    background: #e0e0e0;
+    color: #333;
+    font-size: 0.8rem;
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+
+  .testi-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .testi-arrow {
+    position: absolute;
+    top: 45%;
+    background: #000;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+
+  .testi-arrow:hover {
+    opacity: 1;
+  }
+
+  .testi-arrow.prev {
+    left: -18px;
+  }
+
+  .testi-arrow.next {
+    right: -18px;
+  }
+
+  @media (max-width: 900px) {
+    .testi-card {
+      flex: 0 0 220px;
+      height: auto;
+    }
+    .video-wrapper {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .testi-slider {
+      gap: 15px;
+    }
+    .testi-card {
+      flex: 0 0 80vw;
+      height: auto;
+    }
+    .video-wrapper {
+      height: 240px;
+    }
+    .testi-arrow.prev {
+      left: 5px;
+    }
+    .testi-arrow.next {
+      right: 5px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('.testi-slider');
+    const prevBtn = document.querySelector('.testi-arrow.prev');
+    const nextBtn = document.querySelector('.testi-arrow.next');
+
+    prevBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: -280, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: 280, behavior: 'smooth' });
+    });
+  });
+</script>
