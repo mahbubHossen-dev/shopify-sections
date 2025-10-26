@@ -1,0 +1,159 @@
+{% schema %}
+{
+  "name": "Video Grid Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Recipe Videos"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Watch and explore our recipes brought to life with easy steps and fresh flavors."
+    },
+    {
+      "type": "number",
+      "id": "grid_columns",
+      "label": "Number of columns",
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_block",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_title",
+          "label": "Video Title",
+          "default": "Recipe Video"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL",
+          "default": "https://cdn.shopify.com/videos/c/o/v/2fcd3a552cde4400b0f73f5e8d65e6f1.mp4"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Grid Section",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "video_block"
+        },
+        {
+          "type": "video_block"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<section class="gt-video-section">
+  <div class="gt-container">
+    <!-- Section Header -->
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="gt-section-header">
+        {% if section.settings.heading != blank %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p>{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Video Grid -->
+    <div class="gt-video-grid" style="grid-template-columns: repeat({{ section.settings.grid_columns }}, 1fr);">
+      {% for block in section.blocks %}
+        <div class="gt-video-card" {{ block.shopify_attributes }}>
+          <div class="gt-video-wrapper">
+            {% if block.settings.video_url contains '.mp4' %}
+              <video controls>
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% else %}
+              <iframe src="{{ block.settings.video_url }}" title="{{ block.settings.video_title }}" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
+          </div>
+          {% if block.settings.video_title != blank %}
+            <h3>{{ block.settings.video_title }}</h3>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+.gt-container {
+  margin: 70px auto;
+  font-family: Arial, sans-serif;
+  max-width: 1420px;
+}
+
+/* Section Header */
+.gt-video-section .gt-section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.gt-video-section h2 {
+  font-size: 36px;
+  color: black;
+  margin-bottom: 10px;
+}
+.gt-video-section p {
+  font-size: 18px;
+  color: black;
+}
+
+/* Video Grid */
+.gt-video-grid {
+  display: grid;
+  gap: 30px;
+  justify-content: center;
+}
+.gt-video-card {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.gt-video-card h3 {
+  margin-top: 10px;
+  color: #333;
+  font-size: 18px;
+}
+
+/* Video Wrapper for responsive aspect ratio */
+.gt-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  overflow: hidden;
+  border-radius: 10px;
+}
+.gt-video-wrapper iframe,
+.gt-video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gt-video-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
